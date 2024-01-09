@@ -93,9 +93,9 @@ app.post('/addShop', async (req, res) => {
         location,
         description,
         category,
-        image_one, 
-        image_two,
-        image_three,
+        image_one,
+        image_two, 
+        image_three, 
         image_four,
         image_five
       });
@@ -120,12 +120,14 @@ app.post('/addShop', async (req, res) => {
       console.error('Error fetching shops:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-    
+  });
 
+
+
+  
 // Start the Server
 connectDB().then(() => {
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
-  });
   });
 });
