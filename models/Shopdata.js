@@ -6,6 +6,11 @@ const shopSchema = new mongoose.Schema({
   location: String,
   description: String,
   category: String,
+  image_one: String,
+  image_two: String,
+  image_three: String,
+  image_four: String,
+  image_five: String,
 });
 
 // Create a mongoose model based on the schema

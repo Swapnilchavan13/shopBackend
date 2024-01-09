@@ -7,6 +7,8 @@ const app = express();
 const port = 3010;
 
 const Shopdata = require("./models/Shopdata");
+const Userdata = require("./models/Shopdata");
+
 
 // MongoDB Connection
 mongoose.set("strictQuery", false);
@@ -33,6 +35,51 @@ app.use(cors({ origin: "*" }));
 app.get("/", (req, res) => {
   res.send("Hello Shop");
 });
+
+
+// Registerd Uaer Data
+app.post("/userdata", async (req, res) => {
+  const { username, usernumber, userpassword } =
+    req.body;
+
+  try {
+    // Check if the user already exists based on username and mobile number
+    const existingUser = await Userdata.findOne({ username, usernumber });
+
+    if (existingUser) {
+      // If the user exists, update the address
+      userorder, (existingUser.useraddress = useraddress);
+      await existingUser.save();
+      console.log("User Address Updated");
+      res.status(200).json({ message: "User Address Updated" });
+    } else {
+      // If the user doesn't exist, create a new entry
+      const newData = new Userdata({
+        username,
+        usernumber,
+        userpassword,
+      });
+      await newData.save();
+      console.log("New User Data Saved");
+      res.status(200).json({ message: "New User Data saved" });
+    }
+  } catch (err) {
+    console.error("Error Saving/Updating User Data", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// All User Data
+  app.get("/allusers", async (req, res) => {
+      try {
+        const allusers = await Userdata.find();
+        res.status(200).json(allusers);
+      } catch (err) {
+        console.error("Error Fetching Data", err);
+        res.status(500).json({ message: "Internam Server Error" });
+      }
+    });
 
 
 // Post Shop details
@@ -69,6 +116,9 @@ app.post('/addShop', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+
+
   
 // Start the Server
 connectDB().then(() => {
