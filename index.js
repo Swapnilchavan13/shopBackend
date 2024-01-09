@@ -7,7 +7,7 @@ const app = express();
 const port = 3010;
 
 const Shopdata = require("./models/Shopdata");
-const Userdata = require("./models/Shopdata");
+const Userdata = require("./models/User");
 
 
 // MongoDB Connection
@@ -37,21 +37,17 @@ app.get("/", (req, res) => {
 });
 
 
-// Registerd Uaer Data
+
+// Register User Data
 app.post("/userdata", async (req, res) => {
-  const { username, usernumber, userpassword } =
-    req.body;
+  const { username, usernumber, userpassword } = req.body;
 
   try {
     // Check if the user already exists based on username and mobile number
     const existingUser = await Userdata.findOne({ username, usernumber });
 
     if (existingUser) {
-      // If the user exists, update the address
-      userorder, (existingUser.useraddress = useraddress);
-      await existingUser.save();
-      console.log("User Address Updated");
-      res.status(200).json({ message: "User Address Updated" });
+      res.status(200).json({ message: "User already exists" });
     } else {
       // If the user doesn't exist, create a new entry
       const newData = new Userdata({
@@ -64,31 +60,32 @@ app.post("/userdata", async (req, res) => {
       res.status(200).json({ message: "New User Data saved" });
     }
   } catch (err) {
-    console.error("Error Saving/Updating User Data", err);
+    console.error("Error Saving User Data", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-
 // All User Data
-  app.get("/allusers", async (req, res) => {
-      try {
-        const allusers = await Userdata.find();
-        res.status(200).json(allusers);
-      } catch (err) {
-        console.error("Error Fetching Data", err);
-        res.status(500).json({ message: "Internam Server Error" });
-      }
-    });
+app.get("/allusers", async (req, res) => {
+  try {
+    const allusers = await Userdata.find();
+    res.status(200).json(allusers);
+  } catch (err) {
+    console.error("Error Fetching Data", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 
 // Post Shop details
 app.post('/addShop', async (req, res) => {
-    const { title, location, description, category, image_one, image_two, image_three, image_four, image_five } = req.body;
+    const { uid, title, location, description, category, image_one, image_two, image_three, image_four, image_five } = req.body;
   
     try {
       // Create a new shop instance
       const newShop = new Shopdata({
+        uid,
         title,
         location,
         description,
