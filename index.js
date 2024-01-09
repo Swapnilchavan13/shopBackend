@@ -84,7 +84,7 @@ app.post("/userdata", async (req, res) => {
 
 // Post Shop details
 app.post('/addShop', async (req, res) => {
-    const { title, location, description, category } = req.body;
+    const { title, location, description, category, image_one, image_two, image_three, image_four, image_five } = req.body;
   
     try {
       // Create a new shop instance
@@ -93,6 +93,11 @@ app.post('/addShop', async (req, res) => {
         location,
         description,
         category,
+        image_one, 
+        image_two,
+        image_three,
+        image_four,
+        image_five
       });
   
       // Save the shop to the database
@@ -115,14 +120,12 @@ app.post('/addShop', async (req, res) => {
       console.error('Error fetching shops:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
+    
 
-
-
-  
 // Start the Server
 connectDB().then(() => {
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
+  });
   });
 });
