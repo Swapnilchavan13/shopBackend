@@ -80,7 +80,16 @@ app.get("/allusers", async (req, res) => {
 
 // Post Shop details
 app.post('/addShop', async (req, res) => {
-    const { uid, title, location, description, category, image_one, image_two, image_three, image_four, image_five } = req.body;
+    const { uid, title, location, description, category, image_one, image_two, image_three, image_four, image_five,  price1,
+      price2,
+      price3,
+      price4,
+      price5,
+      title1,
+      title2,
+      title3,
+      title4,
+      title5 } = req.body;
   
     try {
       // Create a new shop instance
@@ -94,7 +103,17 @@ app.post('/addShop', async (req, res) => {
         image_two, 
         image_three, 
         image_four,
-        image_five
+        image_five,
+        price1,
+        price2,
+        price3,
+        price4,
+        price5,
+        title1,
+        title2,
+        title3,
+        title4,
+        title5
       });
   
       // Save the shop to the database
@@ -109,7 +128,7 @@ app.post('/addShop', async (req, res) => {
   });
 
      // All shops data
-  app.get('/allShops', async (req, res) => {
+  app.get('/allshops', async (req, res) => {
     try {
       const allShops = await Shopdata.find();
       res.json(allShops);
@@ -118,6 +137,24 @@ app.post('/addShop', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+
+  // Get details of a single shop by ID
+app.get('/allshops/:id', async (req, res) => {
+  const shopId = req.params.id;
+
+  try {
+    const singleShop = await Shopdata.findById(shopId);
+    if (!singleShop) {
+      return res.status(404).json({ error: 'Shop not found' });
+    }
+
+    res.json(singleShop);
+  } catch (error) {
+    console.error('Error fetching single shop:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 
