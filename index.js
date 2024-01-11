@@ -24,8 +24,8 @@ const connectDB = async () => {
     console.log(error);
     process.exit(1);
   }
+  
 };
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
