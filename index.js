@@ -174,6 +174,14 @@ app.post('/orders', async (req, res) => {
   const { uid, selectedProducts, totalCost, paymentOption, paymentStatus } = req.body;
 
   try {
+    // Check if the user has already ordered the same product
+    const existingOrder = await Order.findOne({ uid, selectedProducts }).exec();
+
+    if (existingOrder) {
+      return res.status(400).send('You have already ordered this product.');
+    }
+
+    // If the order doesn't exist, create a new order
     const newOrder = new Order({
       uid,
       selectedProducts,
@@ -189,6 +197,7 @@ app.post('/orders', async (req, res) => {
     res.status(500).send('Error saving order');
   }
 });
+
 
 
 // API endpoint to retrieve all orders
