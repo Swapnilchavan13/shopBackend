@@ -8,7 +8,7 @@ const port = 3010;
 
 const Shopdata = require("./models/Shopdata");
 const Userdata = require("./models/User");
-
+const Order = require('./models/Order'); 
 
 // MongoDB Connection
 mongoose.set("strictQuery", false);
@@ -127,16 +127,28 @@ app.post('/addShop', async (req, res) => {
     }
   });
 
+    // API endpoint to retrieve all orders
+app.get('/orders', async (req, res) => {
+  try {
+    const orders = await Order.find({}).exec();
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
      // All shops data
-  app.get('/allshops', async (req, res) => {
-    try {
-      const allShops = await Shopdata.find();
-      res.json(allShops);
-    } catch (error) {
-      console.error('Error fetching shops:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+     app.get('/allshops', async (req, res) => {
+      try {
+        const allShops = await Shopdata.find();
+        res.json(allShops);
+      } catch (error) {
+        console.error('Error fetching shops:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
 
 
   // Get details of a single shop by ID
@@ -157,7 +169,57 @@ app.get('/allshops/:id', async (req, res) => {
 });
 
 
+// API endpoint to handle incoming orders
+app.post('/orders', async (req, res) => {
+  const { uid, selectedProducts, totalCost, paymentOption, paymentStatus } = req.body;
 
+  try {
+    const newOrder = new Order({
+      uid,
+      selectedProducts,
+      totalCost,
+      paymentOption,
+      paymentStatus,
+    });
+
+    await newOrder.save();
+    res.status(200).send('Order saved successfully');
+  } catch (error) {
+    console.error('Error saving order:', error);
+    res.status(500).send('Error saving order');
+  }
+});
+
+
+// API endpoint to retrieve all orders
+app.get('/orders', (req, res) => {
+  Order.find({}, (err, orders) => {
+    if (err) {
+      res.status(500).send('Error fetching orders');
+    } else {
+      res.status(200).json(orders);
+    }
+  });
+});
+
+// API endpoint to delete an order by ID
+app.delete('/orders/:id', async (req, res) => {
+  const orderId = req.params.id;
+
+  try {
+    // Find the order by ID and delete it
+    const deletedOrder = await Order.findByIdAndDelete(orderId);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    res.status(200).json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
   
 // Start the Server
 connectDB().then(() => {
