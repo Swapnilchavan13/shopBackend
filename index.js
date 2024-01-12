@@ -8,7 +8,7 @@ const port = 3010;
 
 const Shopdata = require("./models/Shopdata");
 const Userdata = require("./models/User");
-const Order = require('./models/Order'); 
+const Order = require("./models/Order");
 
 // MongoDB Connection
 mongoose.set("strictQuery", false);
@@ -24,7 +24,6 @@ const connectDB = async () => {
     console.log(error);
     process.exit(1);
   }
-  
 };
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -35,8 +34,6 @@ app.use(cors({ origin: "*" }));
 app.get("/", (req, res) => {
   res.send("Hello Shop");
 });
-
-
 
 // Register User Data
 app.post("/userdata", async (req, res) => {
@@ -76,11 +73,45 @@ app.get("/allusers", async (req, res) => {
   }
 });
 
-
-
 // Post Shop details
-app.post('/addShop', async (req, res) => {
-    const { uid, title, location, description, category, image_one, image_two, image_three, image_four, image_five,  price1,
+app.post("/addShop", async (req, res) => {
+  const {
+    uid,
+    title,
+    location,
+    description,
+    category,
+    image_one,
+    image_two,
+    image_three,
+    image_four,
+    image_five,
+    price1,
+    price2,
+    price3,
+    price4,
+    price5,
+    title1,
+    title2,
+    title3,
+    title4,
+    title5,
+  } = req.body;
+
+  try {
+    // Create a new shop instance
+    const newShop = new Shopdata({
+      uid,
+      title,
+      location,
+      description,
+      category,
+      image_one,
+      image_two,
+      image_three,
+      image_four,
+      image_five,
+      price1,
       price2,
       price3,
       price4,
@@ -89,96 +120,70 @@ app.post('/addShop', async (req, res) => {
       title2,
       title3,
       title4,
-      title5 } = req.body;
-  
-    try {
-      // Create a new shop instance
-      const newShop = new Shopdata({
-        uid,
-        title,
-        location,
-        description,
-        category,
-        image_one,
-        image_two, 
-        image_three, 
-        image_four,
-        image_five,
-        price1,
-        price2,
-        price3,
-        price4,
-        price5,
-        title1,
-        title2,
-        title3,
-        title4,
-        title5
-      });
-  
-      // Save the shop to the database
-      await newShop.save();
+      title5,
+    });
 
-      // Respond with a success message or any other relevant data
-      res.json({ message: 'Shop added successfully' });
-    } catch (error) {
-      console.error('Error adding shop:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
+    // Save the shop to the database
+    await newShop.save();
 
-    // API endpoint to retrieve all orders
-app.get('/orders', async (req, res) => {
+    // Respond with a success message or any other relevant data
+    res.json({ message: "Shop added successfully" });
+  } catch (error) {
+    console.error("Error adding shop:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// API endpoint to retrieve all orders
+app.get("/orders", async (req, res) => {
   try {
     const orders = await Order.find({}).exec();
     res.status(200).json(orders);
   } catch (error) {
-    console.error('Error fetching orders:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+// All shops data
+app.get("/allshops", async (req, res) => {
+  try {
+    const allShops = await Shopdata.find();
+    res.json(allShops);
+  } catch (error) {
+    console.error("Error fetching shops:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-     // All shops data
-     app.get('/allshops', async (req, res) => {
-      try {
-        const allShops = await Shopdata.find();
-        res.json(allShops);
-      } catch (error) {
-        console.error('Error fetching shops:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
-    });
-
-
-  // Get details of a single shop by ID
-app.get('/allshops/:id', async (req, res) => {
+// Get details of a single shop by ID
+app.get("/allshops/:id", async (req, res) => {
   const shopId = req.params.id;
 
   try {
     const singleShop = await Shopdata.findById(shopId);
     if (!singleShop) {
-      return res.status(404).json({ error: 'Shop not found' });
+      return res.status(404).json({ error: "Shop not found" });
     }
 
     res.json(singleShop);
   } catch (error) {
-    console.error('Error fetching single shop:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching single shop:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-
 // API endpoint to handle incoming orders
-app.post('/orders', async (req, res) => {
-  const { uid, selectedProducts, totalCost, paymentOption, paymentStatus } = req.body;
+app.post("/orders", async (req, res) => {
+  const { uid, selectedProducts, totalCost, paymentOption, paymentStatus } =
+    req.body;
 
   try {
     // Check if the user has already ordered the same product
     const existingOrder = await Order.findOne({ uid, selectedProducts }).exec();
 
     if (existingOrder) {
-      return res.status(400).send('You have already ordered this product.');
+      return res.status(400).send("You have already ordered this product.");
     }
 
     // If the order doesn't exist, create a new order
@@ -191,20 +196,18 @@ app.post('/orders', async (req, res) => {
     });
 
     await newOrder.save();
-    res.status(200).send('Order saved successfully');
+    res.status(200).send("Order saved successfully");
   } catch (error) {
-    console.error('Error saving order:', error);
-    res.status(500).send('Error saving order');
+    console.error("Error saving order:", error);
+    res.status(500).send("Error saving order");
   }
 });
 
-
-
 // API endpoint to retrieve all orders
-app.get('/orders', (req, res) => {
+app.get("/orders", (req, res) => {
   Order.find({}, (err, orders) => {
     if (err) {
-      res.status(500).send('Error fetching orders');
+      res.status(500).send("Error fetching orders");
     } else {
       res.status(200).json(orders);
     }
@@ -212,7 +215,7 @@ app.get('/orders', (req, res) => {
 });
 
 // API endpoint to delete an order by ID
-app.delete('/orders/:id', async (req, res) => {
+app.delete("/orders/:id", async (req, res) => {
   const orderId = req.params.id;
 
   try {
@@ -220,16 +223,16 @@ app.delete('/orders/:id', async (req, res) => {
     const deletedOrder = await Order.findByIdAndDelete(orderId);
 
     if (!deletedOrder) {
-      return res.status(404).json({ error: 'Order not found' });
+      return res.status(404).json({ error: "Order not found" });
     }
 
-    res.status(200).json({ message: 'Order deleted successfully' });
+    res.status(200).json({ message: "Order deleted successfully" });
   } catch (error) {
-    console.error('Error deleting order:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error deleting order:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
-  
+
 // Start the Server
 connectDB().then(() => {
   app.listen(port, () => {
