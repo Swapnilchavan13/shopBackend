@@ -175,7 +175,7 @@ app.get("/allshops/:id", async (req, res) => {
 
 // API endpoint to handle incoming orders
 app.post("/orders", async (req, res) => {
-  const { uid, selectedProducts, totalCost, paymentOption, paymentStatus } =
+  const { uid, selectedProducts, totalCost, paymentOption, paymentStatus, date } =
     req.body;
 
   try {
@@ -193,6 +193,7 @@ app.post("/orders", async (req, res) => {
       totalCost,
       paymentOption,
       paymentStatus,
+      date
     });
 
     await newOrder.save();

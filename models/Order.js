@@ -6,6 +6,7 @@ const orderSchema = new mongoose.Schema({
   totalCost: Number,
   paymentOption: String,
   paymentStatus: Boolean,
+  date: String
 });
 
 const Order = mongoose.model('Order', orderSchema);
