@@ -80,7 +80,6 @@ app.post("/addShop", async (req, res) => {
     title,
     location,
     description,
-    category,
     image_one,
     image_two,
     image_three,
@@ -91,6 +90,7 @@ app.post("/addShop", async (req, res) => {
     price3,
     price4,
     price5,
+    category,
     title1,
     title2,
     title3,
@@ -172,6 +172,26 @@ app.get("/allshops/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// API endpoint to delete a shop by ID
+app.delete("/allshops/:id", async (req, res) => {
+  const shopId = req.params.id;
+
+  try {
+    // Find the shop by ID and delete it
+    const deletedShop = await Shopdata.findByIdAndDelete(shopId);
+
+    if (!deletedShop) {
+      return res.status(404).json({ error: "Shop not found" });
+    }
+
+    res.status(200).json({ message: "Shop deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting shop:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 // API endpoint to handle incoming orders
 app.post("/orders", async (req, res) => {
