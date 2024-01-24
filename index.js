@@ -13,7 +13,6 @@ const Order = require("./models/Order");
 // MongoDB Connection
 mongoose.set("strictQuery", false);
 
-
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URL, {
@@ -192,7 +191,6 @@ app.delete("/allshops/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 // API endpoint to handle incoming orders
 app.post("/orders", async (req, res) => {
