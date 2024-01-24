@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
   uid: String,
+  username : String,
   selectedProducts: Array,
   totalCost: Number,
   paymentOption: String,

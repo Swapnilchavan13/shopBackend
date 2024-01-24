@@ -13,6 +13,7 @@ const Order = require("./models/Order");
 // MongoDB Connection
 mongoose.set("strictQuery", false);
 
+
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URL, {
