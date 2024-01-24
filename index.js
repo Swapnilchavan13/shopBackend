@@ -196,7 +196,7 @@ app.delete("/allshops/:id", async (req, res) => {
 
 // API endpoint to handle incoming orders
 app.post("/orders", async (req, res) => {
-  const { uid, selectedProducts, totalCost, paymentOption, paymentStatus, date } =
+  const { uid,username, selectedProducts, totalCost, paymentOption, paymentStatus, date } =
     req.body;
 
   try {
@@ -210,6 +210,7 @@ app.post("/orders", async (req, res) => {
     // If the order doesn't exist, create a new order
     const newOrder = new Order({
       uid,
+      username,
       selectedProducts,
       totalCost,
       paymentOption,
