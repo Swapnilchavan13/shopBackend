@@ -73,6 +73,21 @@ app.get("/allusers", async (req, res) => {
   }
 });
 
+// Delete a user
+app.delete("/allusers/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const deletedUser = await Userdata.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error("Error Deleting User", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 // Post Shop details
 app.post("/addShop", async (req, res) => {
   const {
