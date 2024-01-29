@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
   res.send("Hello Shop");
 });
 
+
 // Register User Data
 app.post("/userdata", async (req, res) => {
   const { username, usernumber, userpassword } = req.body;
@@ -44,7 +45,7 @@ app.post("/userdata", async (req, res) => {
     const existingUser = await Userdata.findOne({ usernumber });
 
     if (existingUser) {
-      res.status(200).json({ message: "User already exists" });
+      res.status(200).json({ success: false, message: "Mobile number is already used" });
     } else {
       // If the user doesn't exist, create a new entry
       const newData = new Userdata({
@@ -54,11 +55,11 @@ app.post("/userdata", async (req, res) => {
       });
       await newData.save();
       console.log("New User Data Saved");
-      res.status(200).json({ message: "New User Data saved" });
+      res.status(200).json({ success: true, message: "User registered successfully" });
     }
   } catch (err) {
     console.error("Error Saving User Data", err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 });
 
