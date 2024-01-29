@@ -41,7 +41,7 @@ app.post("/userdata", async (req, res) => {
 
   try {
     // Check if the user already exists based on username and mobile number
-    const existingUser = await Userdata.findOne({ username, usernumber });
+    const existingUser = await Userdata.findOne({ usernumber });
 
     if (existingUser) {
       res.status(200).json({ message: "User already exists" });
