@@ -7,6 +7,7 @@ const shopSchema = new mongoose.Schema({
   location: String,
   description: String,
   category: String,
+  dailyFootfall: String,
   image_one: String,
   image_two: String,
   image_three: String,
