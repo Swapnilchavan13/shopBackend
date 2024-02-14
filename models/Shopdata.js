@@ -13,6 +13,7 @@ const shopSchema = new mongoose.Schema({
   image_three: String,
   image_four: String,
   image_five: String,
+  video_one:String,
   price1: String,
   price2: String,
   price3: String,

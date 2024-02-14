@@ -76,12 +76,12 @@ app.get("/allusers", async (req, res) => {
 // Delete a user
 app.delete("/allusers/:userId", async (req, res) => {
   const userId = req.params.userId;
+  res.status(200).json({ message: "User deleted successfully" });
   try {
     const deletedUser = await Userdata.findByIdAndDelete(userId);
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
     console.error("Error Deleting User", err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -98,11 +98,12 @@ app.post("/addShop", async (req, res) => {
     category,
     dailyFootfall,
     image_one,
-    image_two,
     image_three,
     image_four,
     image_five,
+    video_one,
     price1,
+    image_two,
     price2,
     price3,
     price4,
@@ -128,6 +129,7 @@ app.post("/addShop", async (req, res) => {
       image_three,
       image_four,
       image_five,
+      video_one,
       price1,
       price2,
       price3,
