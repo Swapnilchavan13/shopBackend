@@ -92,6 +92,7 @@ app.delete("/allusers/:userId", async (req, res) => {
 app.post("/addShop", async (req, res) => {
   const {
     uid,
+    date,
     title,
     location,
     description,
@@ -124,6 +125,7 @@ app.post("/addShop", async (req, res) => {
     // Create a new shop instance
     const newShop = new Shopdata({
       uid,
+      date,
       title,
       location,
       description,

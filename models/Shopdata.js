@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // Create a mongoose schema for the shop model
 const shopSchema = new mongoose.Schema({
   uid: String,
+  date: String,
   title: String,
   location: String,
   description: String,
