@@ -10,6 +10,8 @@ const shopSchema = new mongoose.Schema({
   ownerName: String,
   phoneNo:String,
   category: String,
+  cost: Number,
+  screen: Number,
   dailyFootfall: String,
   image_one: String,
   image_two: String,
