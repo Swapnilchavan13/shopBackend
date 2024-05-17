@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const shopSchema = new mongoose.Schema({
   uid: String,
   date: String,
+  userName: String,
   title: String,
   location: String,
   description: String,

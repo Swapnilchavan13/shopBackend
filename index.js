@@ -93,6 +93,7 @@ app.post("/addShop", async (req, res) => {
   const {
     uid,
     date,
+    userName,
     title,
     location,
     description,
@@ -126,6 +127,7 @@ app.post("/addShop", async (req, res) => {
     const newShop = new Shopdata({
       uid,
       date,
+      userName,
       title,
       location,
       description,
